@@ -1,0 +1,88 @@
+*MainActivity
+
+
+package com.example.screendisplay;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.widget.TextView;
+import com.example.screendisplay.util.DisplayUtil;
+import com.example.screendisplay.util.Utils;
+
+
+public class MainActivity extends AppCompatActivity {
+    private TextView text_screen;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        text_screen = findViewById(R.id.text_screen);
+        int dip_10 = Utils.dip2px( this, 10L);
+        text_screen.setPadding(dip_10,dip_10,dip_10,dip_10);
+        text_screen.setBackgroundColor(0xff00ffff);
+        text_screen.setTextColor(0xff333333);
+    }
+    private void showScreenInfo(){
+        int width = DisplayUtil.getScreenWidth(this);
+        int height = DisplayUtil.getScreenHeight(this);
+        float sensity = DisplayUtil.getScreenDensity(this);
+        String info = String.format("当前的屏幕宽度是%dpx，高度是%dpx，像素密度是%dpx",width,height,sensity);
+        text_screen.setText(info);
+    }
+}
+
+
+
+*Utils
+
+
+package com.example.screendisplay.util;
+
+import android.content.Context;
+
+public class Utils {
+
+        public static int dip2px(Context context, float dpValue) {
+            final float scale = context.getResources().getDisplayMetrics().density;
+            return (int) (dpValue * scale + 0.5f);
+        }
+        public static int px2dip(Context context,float dpValue) {
+            final float scale = context.getResources().getDisplayMetrics().density;
+            return (int) (dpValue * scale + 0.5f);
+        }
+    }
+
+
+
+
+
+
+*DisplayUtil
+
+package com.example.screendisplay.util;
+
+import android.content.Context;
+import android.util.DisplayMetrics;
+import android.view.WindowManager;
+
+public class DisplayUtil {
+    public static int getScreenWidth(Context ctx){
+        WindowManager wm = (WindowManager)ctx.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        return dm.widthPixels;
+    }
+    public static int getScreenHeight(Context ctx){
+        WindowManager wm = (WindowManager)ctx.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        return dm.heightPixels;
+    }
+    public static int getScreenDensity(Context ctx){
+        WindowManager wm = (WindowManager)ctx.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(dm);
+        return dm.densityDpi;
+    }
+}
